@@ -1,2 +1,2 @@
 # esp32-thermal
-ESP32-based thermal monitor for a CNC spindle
+ESP32-based thermal monitor for a CNC spindle (SCM Tech Z1). Uses an MLX90640 IR sensor array to measure tool temperature and renders a live heatmap on an SSD1306 OLED display. Intended to detect overheating trends from toolwear or improper feeds/speeds.
