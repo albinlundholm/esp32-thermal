@@ -49,13 +49,13 @@ Modules map 1:1 to build phases. Work them in order; each module lists its micro
 *Build phase: real temperatures over serial.*
 
 **Units:**
-1. **How an IR thermal array works** — microbolometers/thermopiles, why it needs per-pixel calibration, emissivity (matters for shiny spindle metal!).
+1. **How an IR thermal array works** — microbolometers/thermopiles, why it needs per-pixel calibration, emissivity (critical: sensor points at tool-material contact zone, ~40cm away, 55° FoV → ~1.3cm×1cm per pixel. Wood/MDF workpiece ~0.9 emissivity = accurate. Cutting tool is polished carbide/HSS = low emissivity ~0.3, will underread — measuring chip/workpiece surface near cut is more reliable. Fire risk from material, tool wear from heat — both at the contact zone).
 2. **Datasheet reading as a skill** — find together: I2C address, refresh rate register, RAM layout, supply specs. Goal: he navigates the datasheet, not memorizes it.
 3. **The driver pipeline** — EEPROM calibration extraction, raw frames → `MLX90640_CalculateTo()`, why it returns 768 floats, subpage/chess-pattern reading ★.
 4. **Memory & float cost ★** — 768 floats = 3KB per frame, stack vs heap vs static placement, what the FPU on the ESP32 does and doesn't accelerate (single precision only), measuring compute time per frame.
 5. **I2C at 400kHz+ and clock stretching** — why this sensor pushes the bus, frame rate vs bus bandwidth math.
 
-**Quiz pool:** Why does each MLX90640 unit need calibration data from its own EEPROM? Frame-rate-vs-bandwidth: at 8Hz, how much I2C traffic per second, roughly? Where should the 768-float frame buffer live in memory and why (interview style ★)? What's emissivity and how does it bite you on a polished steel spindle?
+**Quiz pool:** Why does each MLX90640 unit need calibration data from its own EEPROM? Frame-rate-vs-bandwidth: at 8Hz, how much I2C traffic per second, roughly? Where should the 768-float frame buffer live in memory and why (interview style ★)? What's emissivity and how does it bite you when pointing at a polished carbide tool vs the wood workpiece surface?
 
 ---
 
@@ -95,9 +95,9 @@ Modules map 1:1 to build phases. Work them in order; each module lists its micro
 **Units:**
 1. **Thresholds done right** — hysteresis (why a single threshold chatters), moving averages/filtering noisy IR data, rate-of-rise as an earlier warning than absolute temp.
 2. **State machines ★ (embedded C++ patterns)** — enum class + switch vs table-driven, modeling NORMAL/WARM/ALERT/FAULT, why explicit state machines are the embedded idiom.
-3. **Spindle domain calibration** — what's hot-normal for the Z1 spindle bearing area, logging a baseline day, emissivity correction in practice.
+3. **Domain calibration** — sensor points at tool-material contact zone (not bearing). Establish baseline temps for normal cuts per material/tool/RPM/feed combo. Emissivity correction: use ~0.9 for wood surface readings. Rate-of-rise on the hotspot pixel cluster is the early fire warning signal; absolute threshold for tool wear correlation.
 
-**Quiz pool:** Why hysteresis — show the chattering failure without it. Sketch the alert state machine, defend each transition. How would you distinguish a real bearing-temperature trend from a sunny day warming the shop?
+**Quiz pool:** Why hysteresis — show the chattering failure without it. Sketch the alert state machine, defend each transition. How would you distinguish a real temperature trend from ambient shop temperature rising on a hot day?
 
 ---
 
@@ -119,7 +119,7 @@ Modules map 1:1 to build phases. Work them in order; each module lists its micro
 
 **Units:**
 1. **WiFi on ESP32 ★** — what the WiFi stack costs (RAM, core 0 time), station mode, reconnect handling as a state machine (Module 6 callback), RSSI in a metal-filled shop.
-2. **MQTT vs HTTP for telemetry** — pub/sub model, why MQTT fits sensor streams, QoS levels, topic design (`z1/spindle/temp`, `z1/spindle/status`), retained messages.
+2. **MQTT vs HTTP for telemetry** — pub/sub model, why MQTT fits sensor streams, QoS levels, topic design (`z1/cut/temp`, `z1/cut/status`), retained messages.
 3. **Serializing on-device ★** — JSON payloads with ArduinoJson, its memory model (stack vs heap documents), payload size vs publish rate budgeting, binary vs JSON tradeoff.
 4. **Timestamps & NTP** — why device time matters for correlation later, NTP sync, what happens to timestamps when WiFi drops (buffer? drop? mark unsynced?).
 5. **OTA updates** — partition schemes revisited (Module 0 callback), why OTA needs two app partitions, rollback.

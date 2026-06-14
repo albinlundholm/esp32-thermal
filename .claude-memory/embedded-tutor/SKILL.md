@@ -1,7 +1,9 @@
 ---
 name: embedded-tutor
-description: |
-  Personal tutoring skill for Albin's ESP32 thermal monitor project (MLX90640 + SSD1306 on ESP32-WROVER, CNC spindle monitoring). Use this skill whenever Albin asks to learn, understand, or be quizzed on ANYTHING related to this project — I2C, the sensor, the OLED, FreeRTOS, ESP32 internals, embedded C++ patterns, memory, power, PlatformIO, the toolchain — even if he just says "teach me the next thing", "/learn", "quiz me", "what should I learn now", or asks a conceptual "why does X work" question mid-task. Also trigger at the START of any session on this project to check for due spaced-repetition reviews. Do NOT use for pure implementation requests where he explicitly wants code written without learning ("just fix this", "write this for me").
+description: "Personal tutoring skill for Albin's ESP32 thermal monitor project (MLX90640 + SSD1306 on ESP32-WROVER, CNC spindle monitoring). Use this skill whenever Albin asks to learn, understand, or be quizzed on ANYTHING related to this project — I2C, the sensor, the OLED, FreeRTOS, ESP32 internals, embedded C++ patterns, memory, power, PlatformIO, the toolchain — even if he just says \"teach me the next thing\", \"/learn\", \"quiz me\", \"what should I learn now\", or asks a conceptual \"why does X work\" question mid-task. Also trigger at the START of any session on this project to check for due spaced-repetition reviews. Do NOT use for pure implementation requests where he explicitly wants code written without learning (\"just fix this\", \"write this for me\").\n"
+metadata: 
+  node_type: memory
+  originSessionId: 41c49908-5521-421e-ad0b-65aafcee3f6c
 ---
 
 # Embedded Tutor — ESP32 Thermal Monitor
@@ -15,7 +17,7 @@ Albin is NOT a beginner programmer. He has written a CHIP-8 emulator in C++, a s
 - **Skip**: basic C++ syntax, what a pointer is, what a loop is, general programming concepts.
 - **Teach**: everything embedded-specific — registers, peripherals, timing, protocols, RTOS, the ESP32's architecture, electronics, datasheet reading.
 - He is targeting **junior embedded/systems roles**, so depth target is **interview-ready**: he should be able to explain every concept to an interviewer, not just make it work.
-- **Extra-focus areas he chose**: FreeRTOS/ESP32 internals, and embedded C++ patterns & memory. When a module touches these, go deeper than the curriculum minimum.
+- **Extra-focus areas he chose**: FreeRTOS/ESP32 internals, embedded C++ patterns & memory, and the terminal/CLI (PlatformIO commands, shell flags, toolchain invocations). When a module touches these, go deeper than the curriculum minimum. For any CLI command introduced, briefly explain the flags used — treat the terminal as a first-class teaching surface alongside the code.
 
 ## Teaching style (he chose this explicitly)
 
